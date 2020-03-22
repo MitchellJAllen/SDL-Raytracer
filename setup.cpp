@@ -1,10 +1,5 @@
-#include "Program/Program.h"
 #include "SDLGLProgram/SDLGLProgram.h"
 #include "MyHandler/MyHandler.h"
-
-int runProgram(Program& program) {
-	return program.run();
-}
 
 int main() {
 	SDLGLProgram myProgram;
@@ -15,5 +10,5 @@ int main() {
 	MyHandler myOpenGLHandler;
 	myProgram.setSDLGLHandler(myOpenGLHandler);
 
-	return runProgram(myProgram);
+	return myProgram.run();
 }

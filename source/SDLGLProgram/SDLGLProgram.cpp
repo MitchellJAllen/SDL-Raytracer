@@ -4,28 +4,42 @@
 
 #include <iostream>
 
-#define ERROR_NONE 0
-#define ERROR_NO_HANDLER 1
-#define ERROR_SDL_SETUP 2
-#define ERROR_VIDEO_SETUP 3
+const char* SDLGLProgram::defaultWindowTitle = "SDL GL Program";
+const unsigned short SDLGLProgram::defaultWindowWidth = 640;
+const unsigned short SDLGLProgram::defaultWindowHeight = 480;
+const unsigned short SDLGLProgram::defaultWindowFramesPerSecond = 60;
+
+SDLGLProgram::SDLGLProgram():
+	handler(nullptr),
+	windowTitle(defaultWindowTitle),
+	windowWidth(defaultWindowWidth),
+	windowHeight(defaultWindowHeight),
+	windowFramesPerSecond(defaultWindowFramesPerSecond)
+{
+}
 
 int SDLGLProgram::run() {
+	static const int errorNone = 0;
+	static const int errorNoHandler = 1;
+	static const int errorSDLSetup = 2;
+	static const int errorVideoSetup = 3;
+
 	bool programQuit = false;
 	SDL_Event event;
 
 	if (this->handler == nullptr) {
 		std::cerr << "Error: no OpenGL handler specified" << std::endl;
-		return ERROR_NO_HANDLER;
+		return errorNoHandler;
 	}
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		std::cerr << "Error: unable to initialize SDL" << std::endl;
-		return ERROR_SDL_SETUP;
+		return errorSDLSetup;
 	}
 
 	if (SDL_SetVideoMode(this->windowWidth, this->windowHeight, 32, SDL_OPENGL) == NULL) {
 		std::cerr << "Error: unable to set SDL video mode" << std::endl;
-		return ERROR_VIDEO_SETUP;
+		return errorVideoSetup;
 	}
 
 	SDL_WM_SetCaption(this->windowTitle, NULL);
@@ -47,7 +61,7 @@ int SDLGLProgram::run() {
 	this->handler->clean();
 	SDL_Quit();
 
-	return ERROR_NONE;
+	return errorNone;
 }
 
 void SDLGLProgram::setSDLGLHandler(SDLGLHandler& handler) {

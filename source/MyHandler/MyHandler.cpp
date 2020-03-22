@@ -6,24 +6,32 @@
 
 #include <vector>
 
-#define WINDOW_WIDTH 960
-#define WINDOW_HEIGHT 540
-#define WINDOW_DEPTH_BYTES 3
+const unsigned short MyHandler::windowWidth = 960;
+const unsigned short MyHandler::windowHeight = 540;
+const unsigned short MyHandler::windowDepthInBytes = 3;
 
-#define PIXEL_RED_INDEX 0
-#define PIXEL_GREEN_INDEX 1
-#define PIXEL_BLUE_INDEX 2
+const unsigned int MyHandler::pixelRedIndex = 0;
+const unsigned int MyHandler::pixelGreenIndex = 1;
+const unsigned int MyHandler::pixelBlueIndex = 2;
 
 void* writeToPixels(void* arg) {
+	const unsigned short windowWidth = 960;
+	const unsigned short windowHeight = 540;
+	const unsigned short windowDepthInBytes = 3;
+
+	const unsigned int pixelRedIndex = 0;
+	const unsigned int pixelGreenIndex = 1;
+	const unsigned int pixelBlueIndex = 2;
+
 	std::vector<float>& pixels = *((std::vector<float>*)arg);
 
-	for (int y = 0; y < WINDOW_HEIGHT; y++) {
-		for (int x = 0; x < WINDOW_WIDTH; x++) {
-			unsigned int pixelIndex = WINDOW_DEPTH_BYTES * (y * WINDOW_WIDTH + x);
+	for (int y = 0; y < windowHeight; y++) {
+		for (int x = 0; x < windowWidth; x++) {
+			unsigned int pixelIndex = windowDepthInBytes * (y * windowWidth + x);
 
-			pixels[pixelIndex + PIXEL_RED_INDEX] = 1;
-			pixels[pixelIndex + PIXEL_GREEN_INDEX] = 0;
-			pixels[pixelIndex + PIXEL_BLUE_INDEX] = 1;
+			pixels[pixelIndex + pixelRedIndex] = 1;
+			pixels[pixelIndex + pixelGreenIndex] = 0;
+			pixels[pixelIndex + pixelBlueIndex] = 1;
 		}
 
 		usleep(1000); // 1 ms
@@ -33,15 +41,19 @@ void* writeToPixels(void* arg) {
 }
 
 void MyHandler::setup() {
-	this->pixels.resize(WINDOW_WIDTH * WINDOW_HEIGHT * WINDOW_DEPTH_BYTES);
+	const unsigned int pixelRedIndex = 0;
+	const unsigned int pixelGreenIndex = 1;
+	const unsigned int pixelBlueIndex = 2;
 
-	for (int y = 0; y < WINDOW_HEIGHT; y++) {
-		for (int x = 0; x < WINDOW_WIDTH; x++) {
-			unsigned int pixelIndex = WINDOW_DEPTH_BYTES * (y * WINDOW_WIDTH + x);
+	this->pixels.resize(windowWidth * windowHeight * windowDepthInBytes);
 
-			this->pixels[pixelIndex + PIXEL_RED_INDEX] = 1;
-			this->pixels[pixelIndex + PIXEL_GREEN_INDEX] = 0.5;
-			this->pixels[pixelIndex + PIXEL_BLUE_INDEX] = 0;
+	for (int y = 0; y < windowHeight; y++) {
+		for (int x = 0; x < windowWidth; x++) {
+			unsigned int pixelIndex = windowDepthInBytes * (y * windowWidth + x);
+
+			this->pixels[pixelIndex + pixelRedIndex] = 1;
+			this->pixels[pixelIndex + pixelGreenIndex] = 0.5;
+			this->pixels[pixelIndex + pixelBlueIndex] = 0;
 		}
 	}
 
@@ -56,13 +68,13 @@ void MyHandler::setup() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGB, GL_FLOAT, this->pixels.data());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, windowWidth, windowHeight, 0, GL_RGB, GL_FLOAT, this->pixels.data());
 
 	pthread_create(&(this->writeThread), NULL, writeToPixels, &(this->pixels));
 }
 
 void MyHandler::render() {
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_RGB, GL_FLOAT, this->pixels.data());
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, windowWidth, windowHeight, GL_RGB, GL_FLOAT, this->pixels.data());
 
 	glClear(GL_COLOR_BUFFER_BIT);
 

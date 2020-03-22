@@ -1,24 +1,25 @@
 #ifndef __SDLGLPROGRAM_H__
 #define __SDLGLPROGRAM_H__
 
-#include "../Program/Program.h"
 #include "../SDLGLHandler/SDLGLHandler.h"
 
-#define DEFAULT_TITLE "SDL GL Program"
-#define DEFAULT_WIDTH 640
-#define DEFAULT_HEIGHT 480
-#define DEFAULT_FRAMES_PER_SECOND 60
-
-class SDLGLProgram : public Program {
+class SDLGLProgram {
 private:
 
-	SDLGLHandler* handler {nullptr};
-	const char* windowTitle {DEFAULT_TITLE};
-	int windowWidth {DEFAULT_WIDTH};
-	int windowHeight {DEFAULT_HEIGHT};
-	int windowFramesPerSecond {DEFAULT_FRAMES_PER_SECOND};
+	static const char* defaultWindowTitle;
+	static const unsigned short defaultWindowWidth;
+	static const unsigned short defaultWindowHeight;
+	static const unsigned short defaultWindowFramesPerSecond;
+
+	SDLGLHandler* handler;
+	const char* windowTitle;
+	int windowWidth;
+	int windowHeight;
+	int windowFramesPerSecond;
 
 public:
+
+	SDLGLProgram();
 
 	int run();
 
