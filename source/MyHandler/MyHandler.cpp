@@ -1,9 +1,9 @@
 #include "MyHandler.h"
 
 #include <GL/gl.h>
-#include <pthread.h>
-#include <unistd.h>
 
+#include <chrono>
+#include <thread>
 #include <vector>
 
 const unsigned short MyHandler::windowWidth = 960;
@@ -14,7 +14,7 @@ const unsigned int MyHandler::pixelRedIndex = 0;
 const unsigned int MyHandler::pixelGreenIndex = 1;
 const unsigned int MyHandler::pixelBlueIndex = 2;
 
-void* writeToPixels(void* arg) {
+void writeToPixels(std::vector<float>& pixels) {
 	const unsigned short windowWidth = 960;
 	const unsigned short windowHeight = 540;
 	const unsigned short windowDepthInBytes = 3;
@@ -23,40 +23,28 @@ void* writeToPixels(void* arg) {
 	const unsigned int pixelGreenIndex = 1;
 	const unsigned int pixelBlueIndex = 2;
 
-	std::vector<float>& pixels = *((std::vector<float>*)arg);
-
 	for (int y = 0; y < windowHeight; y++) {
 		for (int x = 0; x < windowWidth; x++) {
 			unsigned int pixelIndex = windowDepthInBytes * (y * windowWidth + x);
 
-			pixels[pixelIndex + pixelRedIndex] = 1;
+			pixels[pixelIndex + pixelRedIndex] = 0;
 			pixels[pixelIndex + pixelGreenIndex] = 0;
-			pixels[pixelIndex + pixelBlueIndex] = 1;
+			pixels[pixelIndex + pixelBlueIndex] = 0.5;
 		}
 
-		usleep(1000); // 1 ms
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 
 	pthread_exit(NULL);
 }
 
+MyHandler::MyHandler():
+	pixels(windowWidth * windowHeight * windowDepthInBytes, 0),
+	writeThread(writeToPixels, std::ref(this->pixels))
+{
+}
+
 void MyHandler::setup() {
-	const unsigned int pixelRedIndex = 0;
-	const unsigned int pixelGreenIndex = 1;
-	const unsigned int pixelBlueIndex = 2;
-
-	this->pixels.resize(windowWidth * windowHeight * windowDepthInBytes);
-
-	for (int y = 0; y < windowHeight; y++) {
-		for (int x = 0; x < windowWidth; x++) {
-			unsigned int pixelIndex = windowDepthInBytes * (y * windowWidth + x);
-
-			this->pixels[pixelIndex + pixelRedIndex] = 1;
-			this->pixels[pixelIndex + pixelGreenIndex] = 0.5;
-			this->pixels[pixelIndex + pixelBlueIndex] = 0;
-		}
-	}
-
 	glClearColor(0, 0, 0.5, 1);
 
 	glEnable(GL_TEXTURE_2D);
@@ -69,8 +57,6 @@ void MyHandler::setup() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, windowWidth, windowHeight, 0, GL_RGB, GL_FLOAT, this->pixels.data());
-
-	pthread_create(&(this->writeThread), NULL, writeToPixels, &(this->pixels));
 }
 
 void MyHandler::render() {
@@ -96,8 +82,6 @@ void MyHandler::render() {
 }
 
 void MyHandler::clean() {
-	pthread_cancel(this->writeThread);
-
 	this->pixels.clear();
 
 	glDeleteTextures(1, &(this->textureHandle));

@@ -3,8 +3,7 @@
 
 #include "../SDLGLHandler/SDLGLHandler.h"
 
-#include <pthread.h>
-
+#include <thread>
 #include <vector>
 
 class MyHandler : public SDLGLHandler {
@@ -20,9 +19,11 @@ private:
 
 	std::vector<float> pixels;
 	unsigned int textureHandle;
-	pthread_t writeThread;
+	std::thread writeThread;
 
 public:
+
+	MyHandler();
 
 	virtual void setup();
 	virtual void render();
