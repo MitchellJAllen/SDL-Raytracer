@@ -1,7 +1,7 @@
 #ifndef __MYHANDLER_H__
 #define __MYHANDLER_H__
 
-#include "../SDLGLHandler/SDLGLHandler.h"
+#include "SDLGLHandler/SDLGLHandler.h"
 
 #include <thread>
 #include <vector>

@@ -1,7 +1,7 @@
 #ifndef __SDLGLPROGRAM_H__
 #define __SDLGLPROGRAM_H__
 
-#include "../SDLGLHandler/SDLGLHandler.h"
+#include "SDLGLHandler/SDLGLHandler.h"
 
 class SDLGLProgram {
 private:

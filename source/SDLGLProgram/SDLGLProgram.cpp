@@ -1,4 +1,4 @@
-#include "SDLGLProgram.h"
+#include "SDLGLProgram/SDLGLProgram.h"
 
 #include <SDL/SDL.h>
 
