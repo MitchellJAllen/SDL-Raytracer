@@ -2,8 +2,6 @@
 #include "SDLGLProgram/SDLGLProgram.h"
 #include "MyHandler/MyHandler.h"
 
-#include "GL/gl.h"
-
 int runProgram(Program& program) {
 	return program.run();
 }

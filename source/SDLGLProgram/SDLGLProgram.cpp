@@ -44,7 +44,9 @@ int SDLGLProgram::run() {
 		SDL_Delay(1000 / this->windowFramesPerSecond);
 	}
 
+	this->handler->clean();
 	SDL_Quit();
+
 	return ERROR_NONE;
 }
 

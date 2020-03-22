@@ -9,6 +9,7 @@
 
 class MyHandler : public SDLGLHandler {
 private:
+
 	std::vector<float> pixels;
 	unsigned int textureHandle;
 	pthread_t writeThread;
