@@ -3,7 +3,7 @@
 
 int main() {
 	SDLGLProgram myProgram;
-	myProgram.setWindowTitle("SDL OpenGL C++ Object Test");
+	myProgram.setWindowTitle("SDL OpenGL Raytracer");
 	myProgram.setWindowDimensions(960, 540);
 	myProgram.setWindowFramesPerSecond(60);
 
