@@ -38,7 +38,8 @@ void writeToPixels(std::vector<float>& pixels) {
 
 MyHandler::MyHandler():
 	pixels(windowWidth * windowHeight * windowDepthInBytes, 0),
-	writeThread(writeToPixels, std::ref(this->pixels))
+	writeThread(writeToPixels, std::ref(this->pixels)),
+	textureHandle(-1)
 {
 }
 

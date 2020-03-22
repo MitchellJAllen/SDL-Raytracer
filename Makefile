@@ -1,5 +1,5 @@
 COMPILE_FLAGS := -std=c++11 -pedantic -Wall -Wextra -Weffc++ -Isource
-LINK_FLAGS := -pthread -lSDL -lGL
+LINK_FLAGS := -std=c++11 -pedantic -Wall -Wextra -Weffc++ -pthread -lSDL -lGL
 
 all: raytracer
 

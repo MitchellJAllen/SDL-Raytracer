@@ -4,6 +4,8 @@
 class SDLGLHandler {
 public:
 
+	virtual ~SDLGLHandler() {}; // C++ is weird
+
 	virtual void setup() = 0;
 	virtual void render() = 0;
 	virtual void clean() = 0;

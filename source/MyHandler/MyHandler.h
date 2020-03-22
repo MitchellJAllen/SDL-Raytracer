@@ -18,8 +18,8 @@ private:
 	static const unsigned int pixelBlueIndex;
 
 	std::vector<float> pixels;
-	unsigned int textureHandle;
 	std::thread writeThread;
+	unsigned int textureHandle;
 
 public:
 
