@@ -32,10 +32,8 @@ void writeToPixels(std::vector<float>& pixels) {
 			pixels[pixelIndex + pixelBlueIndex] = 0.5;
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
-
-	pthread_exit(NULL);
 }
 
 MyHandler::MyHandler():
